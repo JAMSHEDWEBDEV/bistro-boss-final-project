@@ -1,0 +1,8 @@
+.feature_bg{
+    background-image: url('../../assets/images/featured.jpg');
+    padding-bottom: 100px;
+    padding-top: 50px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
