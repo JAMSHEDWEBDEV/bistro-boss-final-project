@@ -1,12 +1,11 @@
 
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import {Link, useNavigate} from 'react-router-dom';
 import { AuthContext } from '../../Providers/AuthProvider';
 import Swal from 'sweetalert2';
 
 const Login = () => {
-    const capchaRef = useRef();
     const [disable,setDisable] = useState(true);
 
     useEffect(() => {
@@ -31,18 +30,26 @@ const Login = () => {
                     icon: "success",
                     title: "Your Login is successful",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 2000
                   });
                   navigate('/');
             }
         })
         .catch(error =>{
-            console.error(error);
+            if(error){
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Password does not matched",
+                    showConfirmButton: false,
+                    timer: 2000
+                  });
+            }
         })
     }
 
-    const handleCapchaValidation = () => {
-        const user_captcha_value = capchaRef.current.value;
+    const handleCapchaValidation = (e) => {
+        const user_captcha_value = e.target.value;
         if (validateCaptcha(user_captcha_value)) {
             setDisable(false);
             alert('Captcha Matched successfully');
@@ -82,9 +89,8 @@ const Login = () => {
                             <label className="label">
                                 <LoadCanvasTemplate />
                             </label>
-                            <input type="text" ref={capchaRef} placeholder="Type capcha" name="capcha"
+                            <input onBlur={handleCapchaValidation} type="text"  placeholder="Type capcha" name="capcha"
                                 className="input input-bordered" required />
-                            <button onClick={handleCapchaValidation} className='btn btn-outline btn-xs mt-4'>Capcha Validation</button>
                         </div>
                         <div className="form-control mt-6">
                             <button disabled={disable} className="btn btn-primary">Login</button>
