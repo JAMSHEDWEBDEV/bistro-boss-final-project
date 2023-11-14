@@ -1,7 +1,7 @@
 
 import { useContext, useEffect, useState } from 'react';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import { AuthContext } from '../../Providers/AuthProvider';
 import Swal from 'sweetalert2';
 
@@ -14,6 +14,7 @@ const Login = () => {
 
     const {signInUser} = useContext(AuthContext);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleLogin = e =>{
         e.preventDefault();
@@ -32,7 +33,7 @@ const Login = () => {
                     showConfirmButton: false,
                     timer: 2000
                   });
-                  navigate('/');
+                  navigate(location?.state? location.state :'/');
             }
         })
         .catch(error =>{

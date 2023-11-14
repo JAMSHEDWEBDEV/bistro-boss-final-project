@@ -6,7 +6,7 @@ const ChefRecommends = () => {
 
     const [chefs, setChets] = useState([]);
     useEffect(()=>{
-        fetch('menu.json')
+        fetch('http://localhost:5000/menu')
         .then(res => res.json())
         .then(data =>{
             const chefFoodItem = data.filter(chefItem => chefItem.category === 'salad')
