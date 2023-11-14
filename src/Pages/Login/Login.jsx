@@ -1,7 +1,9 @@
 
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import { AuthContext } from '../../Providers/AuthProvider';
+import Swal from 'sweetalert2';
 
 const Login = () => {
     const capchaRef = useRef();
@@ -11,12 +13,32 @@ const Login = () => {
         loadCaptchaEnginge(6);
     }, [])
 
+    const {signInUser} = useContext(AuthContext);
+    const navigate = useNavigate();
+
     const handleLogin = e =>{
         e.preventDefault();
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
         console.log(email,password);
+        signInUser(email,password)
+        .then(result =>{
+            console.log(result.user);
+            if(result){
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Your Login is successful",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                  navigate('/');
+            }
+        })
+        .catch(error =>{
+            console.error(error);
+        })
     }
 
     const handleCapchaValidation = () => {
