@@ -5,7 +5,7 @@ import Footer from "../Pages/Footer/Footer";
 const MainLayout = () => {
 
     const location = useLocation();
-    const isLogin = location.pathname.includes('login');
+    const isLogin = location.pathname.includes('login') || location.pathname.includes('register');
 
     return (
         <div className="max-w-6xl mx-auto">
