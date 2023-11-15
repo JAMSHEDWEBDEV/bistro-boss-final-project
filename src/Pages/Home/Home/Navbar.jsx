@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProvider";
+import { FaShoppingCart } from 'react-icons/fa';
 
 const Navbar = () => {
 
-    const {user,logOut} = useContext(AuthContext);
+    const { user, logOut } = useContext(AuthContext);
 
     const Navlinks = <>
         <NavLink to="/"><li><a>Home</a></li></NavLink>
@@ -12,12 +13,18 @@ const Navbar = () => {
         <NavLink><li><a>Dashboard</a></li></NavLink>
         <NavLink to="/menu"><li><a>Our Menu</a></li></NavLink>
         <NavLink to="/order/Salads"><li><a>Our Shop</a></li></NavLink>
+        <NavLink to="/">
+            <button className="btn">
+                <FaShoppingCart className="text-2xl" />
+                <div className="badge badge-secondary">+0</div>
+            </button>
+        </NavLink>
     </>
 
-    const handleLogOut = ()=>{
+    const handleLogOut = () => {
         logOut()
-        .then(result =>console.log(result.user))
-        .catch(error =>console.error(error))
+            .then(result => console.log(result.user))
+            .catch(error => console.error(error))
     }
 
     return (
@@ -43,14 +50,14 @@ const Navbar = () => {
                 </div>
                 <div className="navbar-end">
                     {
-                        user? <>
-                             <p className="mr-2">{user.displayName}</p>
-                             <div className="h-[100px] w-[100px]"><img src={user.photoURL} alt="profile" /></div>
-                             <button onClick={handleLogOut}>Logout</button>
-                        </>:
-                        <>
-                             <Link to="/login"><button className="btn btn-ghost">Login</button></Link>
-                        </>
+                        user ? <>
+                            <p className="mr-2">{user.displayName}</p>
+                            <div className="h-[100px] w-[100px]"><img src={user.photoURL} alt="profile" /></div>
+                            <button onClick={handleLogOut}>Logout</button>
+                        </> :
+                            <>
+                                <Link to="/login"><button className="btn btn-ghost">Login</button></Link>
+                            </>
                     }
                 </div>
             </div>
