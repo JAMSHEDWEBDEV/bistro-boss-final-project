@@ -6,24 +6,26 @@ import { useForm } from "react-hook-form";
 
 const Register = () => {
 
-    const { createUser } = useContext(AuthContext);
+    const { createUser, userProfileUpdate } = useContext(AuthContext);
 
-    const { register, handleSubmit,reset, formState: { errors }, } = useForm();
+    const { register, handleSubmit, reset, formState: { errors }, } = useForm();
     const onSubmit = data => {
         console.log(data)
         createUser(data.email, data.password)
             .then(result => {
-                if (result) {
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: "Your Registration is successful",
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                }
-                reset();
-
+                console.log(result);
+                userProfileUpdate(data.name, data.photo)
+                    .then(() => {
+                            Swal.fire({
+                                position: "center",
+                                icon: "success",
+                                title: "Your Registration is successful",
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        reset();
+                    })
+                    .catch(error=>console.error(error))
             })
             .catch(error => {
                 if (error) {
@@ -37,7 +39,7 @@ const Register = () => {
                 }
                 reset();
             })
-        }
+    }
 
     return (
         <div className="hero min-h-screen bg-base-200">
@@ -64,6 +66,15 @@ const Register = () => {
                                 {...register("email", { required: true })}
                                 placeholder="email" name="email" className="input input-bordered" />
                             {errors.email && <p className="text-red-600">Email is required</p>}
+                        </div>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Your Photo</span>
+                            </label>
+                            <input type="photo"
+                                {...register("photo", { required: true })}
+                                placeholder="Your Photo" className="input input-bordered" />
+                            {errors.photo && <p className="text-red-600">photo is required</p>}
                         </div>
                         <div className="form-control">
                             <label className="label">
