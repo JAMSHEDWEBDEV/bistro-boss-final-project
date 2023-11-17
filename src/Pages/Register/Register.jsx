@@ -1,12 +1,16 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Providers/AuthProvider";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 const Register = () => {
 
     const { createUser, userProfileUpdate } = useContext(AuthContext);
+    const axiosPublic = useAxiosPublic();
+    const navigate = useNavigate();
 
     const { register, handleSubmit, reset, formState: { errors }, } = useForm();
     const onSubmit = data => {
@@ -16,16 +20,28 @@ const Register = () => {
                 console.log(result);
                 userProfileUpdate(data.name, data.photo)
                     .then(() => {
-                            Swal.fire({
-                                position: "center",
-                                icon: "success",
-                                title: "Your Registration is successful",
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                        reset();
+                        // create user entry in the database
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email
+                        }
+                        axiosPublic.post('/users', userInfo)
+                            .then(res => {
+                                if (res.data.insertedId) {
+                                    Swal.fire({
+                                        position: "center",
+                                        icon: "success",
+                                        title: "Your Registration is successful",
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                    reset();
+                                    navigate('/login');
+                                }
+                            })
+
                     })
-                    .catch(error=>console.error(error))
+                    .catch(error => console.error(error))
             })
             .catch(error => {
                 if (error) {
@@ -100,6 +116,7 @@ const Register = () => {
                             <button className="btn btn-primary">Register</button>
                         </div>
                     </form>
+                    <div className="text-center"><SocialLogin></SocialLogin></div>
                     <div className='text-center mb-4'>
                         <p>Already have an account? <Link to="/login" className='text-xl text-yellow-600'>Login here..</Link> </p>
                     </div>

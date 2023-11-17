@@ -32,7 +32,7 @@ const AuthProvider = ({children}) => {
     return signInWithEmailAndPassword(auth,email,password);
    }
 
-//    google singnIn start 
+//    google signIn start 
 
   const googleSignIn = ()=>{
     setLoading(true);

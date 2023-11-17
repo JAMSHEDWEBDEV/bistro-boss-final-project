@@ -1,52 +1,52 @@
 
 import { useContext, useEffect, useState } from 'react';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Providers/AuthProvider';
 import Swal from 'sweetalert2';
+import SocialLogin from '../../components/SocialLogin/SocialLogin';
 
 const Login = () => {
-    const [disable,setDisable] = useState(true);
+    const [disable, setDisable] = useState(true);
 
     useEffect(() => {
         loadCaptchaEnginge(6);
     }, [])
 
-    const {signInUser} = useContext(AuthContext);
+    const { signInUser } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleLogin = e =>{
+    const handleLogin = e => {
         e.preventDefault();
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email,password);
-        signInUser(email,password)
-        .then(result =>{
-            console.log(result.user);
-            if(result){
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "Your Login is successful",
-                    showConfirmButton: false,
-                    timer: 2000
-                  });
-                  navigate(location?.state? location.state :'/');
-            }
-        })
-        .catch(error =>{
-            if(error){
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "Password does not matched",
-                    showConfirmButton: false,
-                    timer: 2000
-                  });
-            }
-        })
+        console.log(email, password);
+        signInUser(email, password)
+            .then(result => {
+                if (result) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Your Login is successful",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    navigate(location?.state ? location.state : '/');
+                }
+            })
+            .catch(error => {
+                if (error) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Password does not matched",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                }
+            })
     }
 
     const handleCapchaValidation = (e) => {
@@ -90,13 +90,15 @@ const Login = () => {
                             <label className="label">
                                 <LoadCanvasTemplate />
                             </label>
-                            <input onBlur={handleCapchaValidation} type="text"  placeholder="Type capcha" name="capcha"
+                            <input onBlur={handleCapchaValidation} type="text" placeholder="Type capcha" name="capcha"
                                 className="input input-bordered" required />
                         </div>
                         <div className="form-control mt-6">
                             <button disabled={disable} className="btn btn-primary">Login</button>
                         </div>
                     </form>
+                    <div className='divider px-5'>OR</div>
+                    <div className='text-center mb-5'><SocialLogin></SocialLogin></div>
                     <div className='text-center mb-4'>
                         <p>New User? <Link to="/register" className='text-xl text-yellow-600'>Register here..</Link> </p>
                     </div>
