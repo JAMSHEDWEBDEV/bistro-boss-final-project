@@ -23,12 +23,18 @@ const SocialLogin = () => {
                         console.log(res.data)
                         navigate('/');
 
-                    })
+                    });
             })
             .catch(error => {
-                console.error(error);
-            })
-    }
+                if (error.code === 'auth/popup-closed-by-user') {
+                    console.log('User closed the popup');
+                    // Handle this case as per your application's requirement
+                } else {
+                    console.error('Error:', error);
+                    // Handle other errors here
+                }
+            });
+    };
 
     return (
         <div>

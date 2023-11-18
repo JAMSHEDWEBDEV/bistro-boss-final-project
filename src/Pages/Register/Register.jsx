@@ -36,7 +36,7 @@ const Register = () => {
                                         timer: 2000
                                     });
                                     reset();
-                                    navigate('/login');
+                                    navigate('/');
                                 }
                             })
 
